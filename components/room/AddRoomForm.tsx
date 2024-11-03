@@ -20,8 +20,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import axios from "axios";
-import { toast, useToast } from "@/hooks/use-toast";
-import { Loader2, Pencil, PencilLine } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface AddRoomFormProps {
@@ -33,26 +33,22 @@ interface AddRoomFormProps {
 }
 
 const formSchema = z.object({
-  title: z.string().min(3, {
-    message: "Title must be atleast 3 characters long.",
-  }),
-  description: z.string().min(10, {
-    message: "Description must be atleast 10 characters long.",
-  }),
-  bedCount: z.coerce.number().min(1, { message: "bed count is required" }),
+  title: z
+    .string()
+    .min(3, { message: "Title must be at least 3 characters long." }),
+  description: z
+    .string()
+    .min(10, { message: "Description must be at least 10 characters long." }),
+  bedCount: z.coerce.number().min(1, { message: "Bed count is required" }),
   guestCount: z.coerce.number().min(1, { message: "Guest count is required" }),
   bathroomCount: z.coerce
     .number()
     .min(1, { message: "Bathroom count is required" }),
   kingBed: z.coerce.number().min(0),
   queenBed: z.coerce.number().min(0),
-  image: z.string().min(1, {
-    message: "Image is Required",
-  }),
+  image: z.string().min(1, { message: "Image is required" }),
   breakFastPrice: z.coerce.number().optional(),
-  roomPrice: z.coerce.number().min(1, {
-    message: "Room is Required",
-  }),
+  roomPrice: z.coerce.number().min(1, { message: "Room price is required" }),
   roomService: z.boolean().optional(),
   TV: z.boolean().optional(),
   balcony: z.boolean().optional(),
@@ -67,7 +63,6 @@ const formSchema = z.object({
 
 const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
   const [image, setImage] = useState<string | undefined>(room?.image);
-  const [isHotelDeleting, setIsHotelDeleting] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageIsUploading, setImageIsUploading] = useState(false);
   const { toast } = useToast();
@@ -106,18 +101,12 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
 
     try {
       await axios.post("/api/uploadthing/delete", { imageKey });
-      setImage(""); // Hapus image dari state
+      setImage("");
       form.setValue("image", "", { shouldValidate: true });
-      toast({
-        variant: "success",
-        description: "Image removed successfully!",
-      });
+      toast({ variant: "success", description: "Image removed successfully!" });
     } catch (error) {
       console.error("Error removing image:", error);
-      toast({
-        variant: "destructive",
-        description: "Failed to remove image",
-      });
+      toast({ variant: "destructive", description: "Failed to remove image" });
     }
   };
 
@@ -126,13 +115,12 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
     setImageFile(file);
 
     if (file) {
-      handleImageUpload(file); // Langsung upload saat file dipilih
+      handleImageUpload(file);
     }
   };
 
   const handleImageUpload = async (file: File) => {
     setImageIsUploading(true);
-
     const formData = new FormData();
     formData.append("file", file);
     formData.append(
@@ -146,7 +134,7 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
         { method: "POST", body: formData }
       );
       const data = await response.json();
-      setImage(data.secure_url); // Simpan URL gambar yang diunggah
+      setImage(data.secure_url);
       form.setValue("image", data.secure_url, { shouldValidate: true });
       toast({
         variant: "success",
@@ -165,11 +153,8 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
     if (hotel && room) {
       axios
         .patch(`/api/room/${room.id}`, values)
-        .then((res) => {
-          toast({
-            variant: "success",
-            description: "🎉 Room Updated",
-          });
+        .then(() => {
+          toast({ variant: "success", description: "🎉 Room Updated" });
           router.refresh();
           setIsLoading(false);
           handleDialogueOpen();
@@ -178,7 +163,7 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
           console.log(err);
           toast({
             variant: "destructive",
-            description: "something went wrong!",
+            description: "Something went wrong!",
           });
           setIsLoading(false);
         });
@@ -186,11 +171,8 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
       if (!hotel) return;
       axios
         .post("/api/room", { ...values, hotelId: hotel.id })
-        .then((res) => {
-          toast({
-            variant: "success",
-            description: "🎉 Room Created",
-          });
+        .then(() => {
+          toast({ variant: "success", description: "🎉 Room Created" });
           router.refresh();
           setIsLoading(false);
           handleDialogueOpen();
@@ -199,7 +181,7 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
           console.log(err);
           toast({
             variant: "destructive",
-            description: "something went wrong!",
+            description: "Something went wrong!",
           });
           setIsLoading(false);
         });
@@ -210,6 +192,7 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
     <div className="max-h-[75vh] overflow-y-auto px-2 ">
       <Form {...form}>
         <form className="space-y-6">
+          {/* Form fields for title, description, amenities, image, etc. */}
           <FormField
             control={form.control}
             name="title"
@@ -555,39 +538,21 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
             </div>
           </div>
           <div className="pt-4 pb-2">
-            {room ? (
-              <Button
-                type="button"
-                onClick={form.handleSubmit(onSubmit)}
-                className="'max-w-[150px]"
-                disabled={isLoading}>
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4" /> Updating
-                  </>
-                ) : (
-                  <>
-                    <PencilLine className="mr-2 h-4 w-4 " /> Update
-                  </>
-                )}
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                onClick={form.handleSubmit(onSubmit)}
-                className="max-w-[150px]"
-                disabled={isLoading}>
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 " /> Creating
-                  </>
-                ) : (
-                  <>
-                    <Pencil className="mr-2 h-4 w-4" /> Create Room
-                  </>
-                )}
-              </Button>
-            )}
+            <Button
+              type="button"
+              onClick={form.handleSubmit(onSubmit)}
+              disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4" /> Processing
+                </>
+              ) : (
+                <>
+                  <Pencil className="mr-2 h-4 w-4" />{" "}
+                  {room ? "Update Room" : "Create Room"}
+                </>
+              )}
+            </Button>
           </div>
         </form>
       </Form>
