@@ -373,7 +373,8 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                 <FormField
                   control={form.control}
                   name="image"
-                  render={(_field) => (
+                  render={() => (
+                    // Menghapus _field karena tidak digunakan
                     <FormItem className="flex flex-col space-y-3 mt-3">
                       <FormLabel>Upload an Image *</FormLabel>
                       <FormDescription>
