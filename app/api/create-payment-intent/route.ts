@@ -61,12 +61,22 @@ export async function POST(req: Request) {
 
       return NextResponse.json({ paymentIntent });
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error:", error); // Log error untuk debugging
 
-    if (error.clerkError) {
+    // Periksa apakah error adalah objek dan memiliki properti 'clerkError'
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "clerkError" in error &&
+      Array.isArray((error as any).errors)
+    ) {
+      const clerkError = error as {
+        clerkError: boolean;
+        errors: { message: string }[];
+      };
       return new NextResponse(
-        "Error with Clerk API: " + error.errors[0]?.message,
+        "Error with Clerk API: " + clerkError.errors[0]?.message,
         { status: 500 }
       );
     }

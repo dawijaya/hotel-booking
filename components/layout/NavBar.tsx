@@ -5,7 +5,6 @@ import Container from "../Container";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
-import SearchInput from "../SearchInput";
 import { ModeToggle } from "../theme-toggle";
 import { NavMenu } from "./NavMenu";
 
@@ -39,10 +38,10 @@ const NavBar = () => {
                   onClick={() => router.push("/sign-in")}
                   variant="outline"
                   size="sm">
-                  Sign in
+                  Daftar
                 </Button>
                 <Button onClick={() => router.push("/sign-up")} size="sm">
-                  Sign up
+                  Masuk
                 </Button>
               </>
             )}
