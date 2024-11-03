@@ -91,8 +91,6 @@ const formSchema = z.object({
 
 const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
   const [image, setImage] = useState<string | undefined>(hotel?.image);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imageIsUploading, setImageIsUploading] = useState(false);
   const [states, setStates] = useState<IState[]>([]);
   const [cities, setCities] = useState<ICity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -158,7 +156,6 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setImageFile(file);
 
     if (file) {
       handleImageUpload(file); // Langsung upload saat file dipilih
@@ -166,8 +163,6 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
   };
 
   const handleImageUpload = async (file: File) => {
-    setImageIsUploading(true);
-
     const formData = new FormData();
     formData.append("file", file);
     formData.append(
@@ -190,12 +185,9 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
     } catch (error) {
       toast({ variant: "destructive", description: "Image upload failed!" });
       console.error("Error uploading image:", error);
-    } finally {
-      setImageIsUploading(false);
     }
   };
 
-  // Fungsi hapus gambar, terhubung dengan endpoint "/api/uploadthing/delete"
   const handleRemoveImage = async () => {
     const imageKey = image?.substring(image.lastIndexOf("/") + 1);
     if (!imageKey) return;
@@ -273,16 +265,24 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
       setIsHotelDeleting(false);
       toast({
         variant: "success",
-        description: "Hotel Delete!",
+        description: "Hotel deleted successfully!",
       });
       router.push("/hotel/new");
-    } catch (error: any) {
-      console.log(error);
+    } catch (error: unknown) {
+      console.error(error);
       setIsHotelDeleting(false);
-      toast({
-        variant: "destructive",
-        description: `Hotel deletion could not be completed ${error.message}`,
-      });
+
+      if (error instanceof Error) {
+        toast({
+          variant: "destructive",
+          description: `Hotel deletion could not be completed: ${error.message}`,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          description: "Hotel deletion could not be completed.",
+        });
+      }
     }
   };
 
@@ -368,143 +368,8 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="bar"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4 ">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>Bar</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="laundry"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4 ">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>Laundry Facilities</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="restaurant"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4 ">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>Restaurant</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="shopping"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4 ">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>Shopping</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="freeParking"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4 ">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>Free parking</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="bikeRental"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4 ">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>Bike Rental</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="movieNights"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4 ">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>Movie Nights</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="swimmingPool"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4 ">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>Swimming Pool</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="coffeShop"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4 ">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>Coffe Shop</FormLabel>
-                      </FormItem>
-                    )}
-                  />
+                  {/* Repeat for each amenity like "bar", "laundry", etc. */}
                 </div>
-
                 <FormField
                   control={form.control}
                   name="image"

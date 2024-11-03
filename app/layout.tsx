@@ -48,8 +48,17 @@ export default function RootLayout({
             <Toaster />
             <main className="flex flex-col min-h-screen bg-secondary">
               <NavBar />
+              <header className="flex justify-end p-4">
+                {/* Tampilkan tombol SignIn atau UserButton sesuai status pengguna */}
+                <SignedOut>
+                  <SignInButton mode="modal" />
+                </SignedOut>
+                <SignedIn>
+                  <UserButton afterSignOutUrl="/" />
+                </SignedIn>
+              </header>
               <section className="flex-grow">
-                <Container> {children}</Container>
+                <Container>{children}</Container>
               </section>
             </main>
           </ThemeProvider>

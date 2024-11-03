@@ -6,7 +6,8 @@ const f = createUploadthing();
 
 export const ourFileRouter = {
   imageUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
-    .middleware(async ({ req }) => {
+    .middleware(async () => {
+      // Hapus 'req' karena tidak digunakan
       const { userId } = await auth();
       if (!userId) throw new UploadThingError("Unauthorized");
       return { userId };

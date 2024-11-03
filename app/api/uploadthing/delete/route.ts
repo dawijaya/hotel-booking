@@ -33,9 +33,13 @@ export async function POST(req: Request) {
       console.error("Failed to delete image in Cloudinary:", result);
       return new NextResponse("Failed to delete image", { status: 500 });
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error at uploadthing/delete:", error);
-    return new NextResponse(`Internal Server Error: ${error.message}`, {
+
+    // Memeriksa apakah error memiliki properti 'message'
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    return new NextResponse(`Internal Server Error: ${errorMessage}`, {
       status: 500,
     });
   }

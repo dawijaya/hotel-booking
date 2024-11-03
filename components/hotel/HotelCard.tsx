@@ -8,7 +8,6 @@ import Image from "next/image";
 import AmenityItem from "../AmenityItem";
 import { Dumbbell, MapPin } from "lucide-react";
 import useLocation from "@/hooks/useLocation";
-import { Button } from "../ui/button";
 import { FaSwimmer } from "react-icons/fa";
 
 interface HotelWithRooms {
@@ -18,8 +17,8 @@ interface HotelWithRooms {
   address_line: string;
   city?: string;
   catalog: {
-    phone: string; // Pastikan ini ada
-    category: string; // Pastikan ini ada
+    phone: string;
+    category: string;
     star_rating: number;
     hero_image_url: {
       lg: string;
@@ -43,7 +42,7 @@ const HotelCard = ({ hotel }: { hotel: HotelWithRooms }) => {
   return (
     <div
       onClick={() => {
-        console.log("Navigating to hotel with ID:", hotel.id); // Log untuk memeriksa hotel.id
+        console.log("Navigating to hotel with ID:", hotel.id);
         if (!isMyHotels) {
           router.push(`/hotel-details/${hotel.id}`);
         }
@@ -77,12 +76,11 @@ const HotelCard = ({ hotel }: { hotel: HotelWithRooms }) => {
             )}
             {hotel.gym && (
               <AmenityItem>
-                <Dumbbell className="w-4-h-4" />
+                <Dumbbell className="w-4 h-4" />
                 Gym
               </AmenityItem>
             )}
           </div>
-          {/* Tambahkan informasi baru di bawah */}
           <div className="text-primary/90">
             <div>Phone: {hotel.catalog.phone}</div>
             <div>Category: {hotel.catalog.category}</div>
