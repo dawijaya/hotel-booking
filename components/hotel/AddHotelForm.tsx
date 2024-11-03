@@ -341,27 +341,28 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                   <FormField
                     control={form.control}
                     name="gym"
-                    render={({ field }) => (
+                    render={({ field: { value, onChange } }) => (
                       <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
                         <FormControl>
                           <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
+                            checked={!!value} // memastikan boolean value
+                            onCheckedChange={(checked) => onChange(checked)} // menyesuaikan onChange
                           />
                         </FormControl>
                         <FormLabel>Gym</FormLabel>
                       </FormItem>
                     )}
                   />
+
                   <FormField
                     control={form.control}
                     name="spa"
-                    render={({ field }) => (
+                    render={({ field: { value, onChange } }) => (
                       <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
                         <FormControl>
                           <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
+                            checked={!!value} // memastikan boolean value
+                            onCheckedChange={(checked) => onChange(checked)} // menyesuaikan onChange
                           />
                         </FormControl>
                         <FormLabel>Spa</FormLabel>
@@ -372,7 +373,7 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                 <FormField
                   control={form.control}
                   name="image"
-                  render={({ field }) => (
+                  render={(_field) => (
                     <FormItem className="flex flex-col space-y-3 mt-3">
                       <FormLabel>Upload an Image *</FormLabel>
                       <FormDescription>
