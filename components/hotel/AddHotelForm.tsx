@@ -342,7 +342,7 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                     control={form.control}
                     name="gym"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4 ">
+                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
                         <FormControl>
                           <Checkbox
                             checked={field.value}
@@ -357,7 +357,7 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                     control={form.control}
                     name="spa"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4 ">
+                      <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
                         <FormControl>
                           <Checkbox
                             checked={field.value}
@@ -368,7 +368,6 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                       </FormItem>
                     )}
                   />
-                  {/* Repeat for each amenity like "bar", "laundry", etc. */}
                 </div>
                 <FormField
                   control={form.control}
@@ -416,7 +415,7 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                     <FormItem>
                       <FormLabel>Select Country</FormLabel>
                       <FormDescription>
-                        In Which country is your properti located?
+                        In which country is your property located?
                       </FormDescription>
                       <Select
                         disabled={isLoading}
@@ -430,15 +429,13 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                           />
                         </SelectTrigger>
                         <SelectContent>
-                          {countries.map((country) => {
-                            return (
-                              <SelectItem
-                                key={country.isoCode}
-                                value={country.isoCode}>
-                                {country.name}
-                              </SelectItem>
-                            );
-                          })}
+                          {countries.map((country) => (
+                            <SelectItem
+                              key={country.isoCode}
+                              value={country.isoCode}>
+                              {country.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormItem>
@@ -449,9 +446,9 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                   name="state"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Select Stage</FormLabel>
+                      <FormLabel>Select State</FormLabel>
                       <FormDescription>
-                        In Which stage is your properti located?
+                        In which state is your property located?
                       </FormDescription>
                       <Select
                         disabled={isLoading || states.length === 0}
@@ -461,19 +458,17 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                         <SelectTrigger className="bg-background">
                           <SelectValue
                             defaultValue={field.value}
-                            placeholder="Select a Stage"
+                            placeholder="Select a State"
                           />
                         </SelectTrigger>
                         <SelectContent>
-                          {states.map((state) => {
-                            return (
-                              <SelectItem
-                                key={state.isoCode}
-                                value={state.isoCode}>
-                                {state.name}
-                              </SelectItem>
-                            );
-                          })}
+                          {states.map((state) => (
+                            <SelectItem
+                              key={state.isoCode}
+                              value={state.isoCode}>
+                              {state.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormItem>
@@ -486,7 +481,7 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                     <FormItem>
                       <FormLabel>Select City</FormLabel>
                       <FormDescription>
-                        In Which city/town is your properti located?
+                        In which city/town is your property located?
                       </FormDescription>
                       <Select
                         disabled={isLoading || states.length === 0}
@@ -500,13 +495,11 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                           />
                         </SelectTrigger>
                         <SelectContent>
-                          {cities.map((city) => {
-                            return (
-                              <SelectItem key={city.name} value={city.name}>
-                                {city.name}
-                              </SelectItem>
-                            );
-                          })}
+                          {cities.map((city) => (
+                            <SelectItem key={city.name} value={city.name}>
+                              {city.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormItem>
