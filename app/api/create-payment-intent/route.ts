@@ -16,7 +16,19 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { booking, payment_intent_id } = body;
+    const {
+      booking,
+      payment_intent_id,
+    }: {
+      booking: {
+        totalPrice: number;
+        startDate: Date;
+        endDate: Date;
+        hotelOwnerId: string;
+        breakFastInclude: boolean;
+      };
+      payment_intent_id?: string;
+    } = body;
 
     if (!booking || typeof booking.totalPrice !== "number") {
       return new NextResponse("Invalid booking data", { status: 400 });
@@ -28,7 +40,7 @@ export async function POST(req: Request) {
       userEmail: user.emailAddresses[0]?.emailAddress || "",
       userId: user.id,
       currency: "usd",
-      paymentIntentId: payment_intent_id,
+      paymentIntentId: payment_intent_id || "", // Berikan nilai default jika undefined
     };
 
     let foundBooking;
@@ -62,14 +74,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ paymentIntent });
     }
   } catch (error: unknown) {
-    console.error("Error:", error); // Log error untuk debugging
+    console.error("Error:", error);
 
-    // Periksa apakah error adalah objek dan memiliki properti 'clerkError'
     if (
       typeof error === "object" &&
       error !== null &&
       "clerkError" in error &&
-      Array.isArray((error as any).errors)
+      Array.isArray(
+        (error as { clerkError: boolean; errors: { message: string }[] }).errors
+      )
     ) {
       const clerkError = error as {
         clerkError: boolean;
