@@ -29,4 +29,3 @@ Pada tahap ini, saya belum mengembangkan fitur transaksi dan pemesanan karena te
 
 Catatan
 Jika Anda adalah pemilik API dan membaca README ini, mohon pertimbangkan untuk mengatur kebijakan CORS agar aplikasi ini dapat mengakses data ketersediaan kamar secara langsung.
-# hotel-booking
