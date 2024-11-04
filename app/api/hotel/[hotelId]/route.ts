@@ -2,11 +2,10 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-interface ContextParams {
-  params: { hotelId: string };
-}
-
-export async function PATCH(req: Request, { params }: ContextParams) {
+export async function PATCH(
+  req: Request,
+  { params }: { params: { hotelId: string } }
+) {
   try {
     const body = await req.json();
     const { userId } = await auth();
@@ -31,7 +30,10 @@ export async function PATCH(req: Request, { params }: ContextParams) {
   }
 }
 
-export async function DELETE(req: Request, { params }: ContextParams) {
+export async function DELETE(
+  req: Request,
+  { params }: { params: { hotelId: string } }
+) {
   try {
     const { userId } = await auth();
 
