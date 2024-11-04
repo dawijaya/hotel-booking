@@ -2,14 +2,14 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-export async function PATCH(
-  req: Request,
-  context: { params: { hotelId: string } }
-) {
+interface ContextParams {
+  params: { hotelId: string };
+}
+
+export async function PATCH(req: Request, { params }: ContextParams) {
   try {
     const body = await req.json();
     const { userId } = await auth();
-    const { params } = context;
 
     if (!params.hotelId) {
       return new NextResponse("Hotel Id is required", { status: 400 });
@@ -31,13 +31,9 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  context: { params: { hotelId: string } }
-) {
+export async function DELETE(req: Request, { params }: ContextParams) {
   try {
     const { userId } = await auth();
-    const { params } = context;
 
     if (!params.hotelId) {
       return new NextResponse("Hotel Id is required", { status: 400 });
