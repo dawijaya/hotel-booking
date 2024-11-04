@@ -4,13 +4,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { hotelId: string } }
+  context: { params: { hotelId: string } }
 ) {
   try {
     const body = await req.json();
     const { userId } = await auth();
 
-    if (!params?.hotelId) {
+    if (!context.params?.hotelId) {
       return new NextResponse("Hotel Id is required", { status: 400 });
     }
 
@@ -19,7 +19,7 @@ export async function PATCH(
     }
 
     const hotel = await prismadb.hotel.update({
-      where: { id: params.hotelId },
+      where: { id: context.params.hotelId },
       data: { ...body },
     });
 
@@ -32,12 +32,12 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { hotelId: string } }
+  context: { params: { hotelId: string } }
 ) {
   try {
     const { userId } = await auth();
 
-    if (!params?.hotelId) {
+    if (!context.params?.hotelId) {
       return new NextResponse("Hotel Id is required", { status: 400 });
     }
 
@@ -46,7 +46,7 @@ export async function DELETE(
     }
 
     const hotel = await prismadb.hotel.delete({
-      where: { id: params.hotelId },
+      where: { id: context.params.hotelId },
     });
 
     return NextResponse.json(hotel);
