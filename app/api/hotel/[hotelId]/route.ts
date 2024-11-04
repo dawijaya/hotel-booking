@@ -2,16 +2,15 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-// Fungsi PATCH
+// Fungsi untuk PATCH request
 export async function PATCH(
   req: Request,
-  { params }: { params: Record<string, string> } // Menggunakan Record untuk generalisasi tipe
+  context: any // Menggunakan tipe any untuk context sementara
 ) {
   try {
     const body = await req.json();
     const { userId } = await auth();
-
-    const hotelId = params.hotelId;
+    const hotelId = context.params?.hotelId;
 
     if (!hotelId) {
       return new NextResponse("Hotel Id is required", { status: 400 });
@@ -33,14 +32,14 @@ export async function PATCH(
   }
 }
 
-// Fungsi DELETE
+// Fungsi untuk DELETE request
 export async function DELETE(
   req: Request,
-  { params }: { params: Record<string, string> } // Menggunakan Record untuk generalisasi tipe
+  context: any // Menggunakan tipe any untuk context sementara
 ) {
   try {
     const { userId } = await auth();
-    const hotelId = params.hotelId;
+    const hotelId = context.params?.hotelId;
 
     if (!hotelId) {
       return new NextResponse("Hotel Id is required", { status: 400 });
