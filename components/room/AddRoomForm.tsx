@@ -21,8 +21,8 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Loader2, Pencil } from "lucide-react";
 
 interface AddRoomFormProps {
   hotel?: Hotel & {
@@ -35,20 +35,22 @@ interface AddRoomFormProps {
 const formSchema = z.object({
   title: z
     .string()
-    .min(3, { message: "Title must be at least 3 characters long." }),
+    .min(3, { message: "Judul harus terdiri dari minimal 3 karakter." }),
   description: z
     .string()
-    .min(10, { message: "Description must be at least 10 characters long." }),
-  bedCount: z.coerce.number().min(1, { message: "Bed count is required" }),
-  guestCount: z.coerce.number().min(1, { message: "Guest count is required" }),
+    .min(10, { message: "Deskripsi harus terdiri dari minimal 10 karakter." }),
+  bedCount: z.coerce
+    .number()
+    .min(1, { message: "Jumlah tempat tidur diperlukan" }),
+  guestCount: z.coerce.number().min(1, { message: "Jumlah tamu diperlukan" }),
   bathroomCount: z.coerce
     .number()
-    .min(1, { message: "Bathroom count is required" }),
+    .min(1, { message: "Jumlah kamar mandi diperlukan" }),
   kingBed: z.coerce.number().min(0),
   queenBed: z.coerce.number().min(0),
-  image: z.string().min(1, { message: "Image is required" }),
+  image: z.string().min(1, { message: "Gambar diperlukan" }),
   breakFastPrice: z.coerce.number().optional(),
-  roomPrice: z.coerce.number().min(1, { message: "Room price is required" }),
+  roomPrice: z.coerce.number().min(1, { message: "Harga kamar diperlukan" }),
   roomService: z.boolean().optional(),
   TV: z.boolean().optional(),
   balcony: z.boolean().optional(),
@@ -101,10 +103,10 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
       await axios.post("/api/uploadthing/delete", { imageKey });
       setImage("");
       form.setValue("image", "", { shouldValidate: true });
-      toast({ variant: "success", description: "Image removed successfully!" });
+      toast({ variant: "success", description: "Gambar berhasil dihapus!" });
     } catch (error) {
-      console.error("Error removing image:", error);
-      toast({ variant: "destructive", description: "Failed to remove image" });
+      console.error("Error menghapus gambar:", error);
+      toast({ variant: "destructive", description: "Gagal menghapus gambar" });
     }
   };
 
@@ -133,11 +135,14 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
       form.setValue("image", data.secure_url, { shouldValidate: true });
       toast({
         variant: "success",
-        description: "🎉 Image uploaded successfully!",
+        description: "🎉 Gambar berhasil diunggah!",
       });
     } catch (error) {
-      toast({ variant: "destructive", description: "Image upload failed!" });
-      console.error("Error uploading image:", error);
+      toast({
+        variant: "destructive",
+        description: "Gagal mengunggah gambar!",
+      });
+      console.error("Error mengunggah gambar:", error);
     }
   };
 
@@ -147,7 +152,10 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
       axios
         .patch(`/api/room/${room.id}`, values)
         .then(() => {
-          toast({ variant: "success", description: "🎉 Room Updated" });
+          toast({
+            variant: "success",
+            description: "🎉 Kamar berhasil diperbarui",
+          });
           router.refresh();
           setIsLoading(false);
           handleDialogueOpen();
@@ -156,7 +164,7 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
           console.log(err);
           toast({
             variant: "destructive",
-            description: "Something went wrong!",
+            description: "Terjadi kesalahan!",
           });
           setIsLoading(false);
         });
@@ -165,7 +173,10 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
       axios
         .post("/api/room", { ...values, hotelId: hotel.id })
         .then(() => {
-          toast({ variant: "success", description: "🎉 Room Created" });
+          toast({
+            variant: "success",
+            description: "🎉 Kamar berhasil dibuat",
+          });
           router.refresh();
           setIsLoading(false);
           handleDialogueOpen();
@@ -174,7 +185,7 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
           console.log(err);
           toast({
             variant: "destructive",
-            description: "Something went wrong!",
+            description: "Terjadi kesalahan!",
           });
           setIsLoading(false);
         });
@@ -190,8 +201,8 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Room Title *</FormLabel>
-                <FormDescription>Provide a room name</FormDescription>
+                <FormLabel>Judul Kamar *</FormLabel>
+                <FormDescription>Berikan nama untuk kamar ini</FormDescription>
                 <FormControl>
                   <Input placeholder="Double hotel" {...field} />
                 </FormControl>
@@ -199,6 +210,7 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
               </FormItem>
             )}
           />
+          {/* Kolom isian lainnya... */}
           <FormField
             control={form.control}
             name="description"
