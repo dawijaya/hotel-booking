@@ -21,14 +21,11 @@ import {
   Loader2,
   MountainSnow,
   Pencil,
-  Plus,
   Ship,
   Trash,
   Trees,
   Tv,
-  User,
   Users,
-  Utensils,
   UtensilsCrossed,
   VolumeX,
   Wand2,
@@ -52,7 +49,7 @@ import { useToast } from "@/hooks/use-toast";
 import { DatePickerWithRange } from "./DateRangePicker";
 import { DateRange } from "react-day-picker";
 import React from "react";
-import { addDays, differenceInCalendarDays } from "date-fns";
+import { differenceInCalendarDays } from "date-fns";
 import { Checkbox } from "../ui/checkbox";
 import { useAuth } from "@clerk/nextjs";
 import useBookRoom from "@/hooks/useBookRoom";
@@ -65,7 +62,7 @@ interface RoomCardProps {
   bookings?: Booking[];
 }
 
-const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
+const RoomCard = ({ hotel, room = [] }: RoomCardProps) => {
   const { setRoomData, paymentIntentId, setClientSecret, setPaymentIntentId } =
     useBookRoom();
   const [isLoading, setIsLoading] = useState(false);
@@ -194,7 +191,7 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
           setPaymentIntentId(data.paymentIntent.id);
           router.push("/book-room");
         })
-        .catch((error: any) => {
+        .catch((error: Error) => {
           console.log("Error:", error);
           toast({
             variant: "destructive",
