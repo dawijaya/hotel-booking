@@ -2,9 +2,15 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+interface ContextParams {
+  params: {
+    hotelId: string;
+  };
+}
+
 export async function PATCH(
   req: Request,
-  context: any // Menggunakan `any` agar lebih fleksibel dengan Next.js
+  context: ContextParams // Mendefinisikan tipe `ContextParams`
 ) {
   try {
     const body = await req.json();
@@ -33,7 +39,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  context: any // Menggunakan `any` agar lebih fleksibel dengan Next.js
+  context: ContextParams // Menggunakan `ContextParams`
 ) {
   try {
     const { userId } = await auth();
