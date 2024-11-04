@@ -270,7 +270,7 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
           <FormField
             control={form.control}
             name="image"
-            render={({ field }) => (
+            render={({}) => (
               <FormItem className="flex flex-col space-y-3 mt-3">
                 <FormLabel>Upload an Image *</FormLabel>
                 <FormDescription>
