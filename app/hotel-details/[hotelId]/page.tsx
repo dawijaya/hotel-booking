@@ -1,20 +1,20 @@
 import { fetchHotelById } from "@/action/fetchHotelsById";
 import HotelDetail from "@/components/hotel/HotelDetail";
 
-interface HotelDetailsPageProps {
+// Next.js secara otomatis menyediakan params dari rute dinamis
+interface PageProps {
   params: {
     hotelId: string;
   };
 }
 
-export default async function HotelDetailsPage({
-  params,
-}: HotelDetailsPageProps) {
+export default async function HotelDetailsPage({ params }: PageProps) {
+  // Mengakses hotelId dari params
   const { hotelId } = params;
 
-  // Logging untuk memeriksa ID yang diterima
   console.log("Received ID:", hotelId);
 
+  // Ambil data hotel
   const hotel = await fetchHotelById(hotelId);
 
   if (!hotel) {
