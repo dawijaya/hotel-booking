@@ -4,14 +4,14 @@ import { NextResponse } from "next/server";
 
 export async function PATCH(
   req: Request,
-  context: { params?: { hotelId: string } }
+  context: { params: { hotelId: string } }
 ) {
   try {
     const body = await req.json();
     const { userId } = await auth();
     const { params } = context;
 
-    if (!params || !params.hotelId) {
+    if (!params.hotelId) {
       return new NextResponse("Hotel Id is required", { status: 400 });
     }
 
@@ -33,13 +33,13 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  context: { params?: { hotelId: string } }
+  context: { params: { hotelId: string } }
 ) {
   try {
     const { userId } = await auth();
     const { params } = context;
 
-    if (!params || !params.hotelId) {
+    if (!params.hotelId) {
       return new NextResponse("Hotel Id is required", { status: 400 });
     }
 
