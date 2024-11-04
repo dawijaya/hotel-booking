@@ -1,19 +1,19 @@
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-interface Context {
-  params: {
-    hotelId: string;
-  };
-}
-
-export async function PATCH(req: NextRequest, { params }: Context) {
+// Fungsi PATCH
+export async function PATCH(
+  req: Request,
+  { params }: { params: Record<string, string> } // Menggunakan Record untuk generalisasi tipe
+) {
   try {
     const body = await req.json();
     const { userId } = await auth();
 
-    if (!params?.hotelId) {
+    const hotelId = params.hotelId;
+
+    if (!hotelId) {
       return new NextResponse("Hotel Id is required", { status: 400 });
     }
 
@@ -22,7 +22,7 @@ export async function PATCH(req: NextRequest, { params }: Context) {
     }
 
     const hotel = await prismadb.hotel.update({
-      where: { id: params.hotelId },
+      where: { id: hotelId },
       data: { ...body },
     });
 
@@ -33,11 +33,16 @@ export async function PATCH(req: NextRequest, { params }: Context) {
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: Context) {
+// Fungsi DELETE
+export async function DELETE(
+  req: Request,
+  { params }: { params: Record<string, string> } // Menggunakan Record untuk generalisasi tipe
+) {
   try {
     const { userId } = await auth();
+    const hotelId = params.hotelId;
 
-    if (!params?.hotelId) {
+    if (!hotelId) {
       return new NextResponse("Hotel Id is required", { status: 400 });
     }
 
@@ -46,7 +51,7 @@ export async function DELETE(req: NextRequest, { params }: Context) {
     }
 
     const hotel = await prismadb.hotel.delete({
-      where: { id: params.hotelId },
+      where: { id: hotelId },
     });
 
     return NextResponse.json(hotel);
