@@ -2,22 +2,15 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-interface ContextParams {
-  params: {
-    hotelId: string;
-  };
-}
-
 export async function PATCH(
   req: Request,
-  context: ContextParams // Mendefinisikan tipe `ContextParams`
+  { params }: { params: { hotelId: string } }
 ) {
   try {
     const body = await req.json();
     const { userId } = await auth();
-    const { hotelId } = context.params;
 
-    if (!hotelId) {
+    if (!params?.hotelId) {
       return new NextResponse("Hotel Id is required", { status: 400 });
     }
 
@@ -26,7 +19,7 @@ export async function PATCH(
     }
 
     const hotel = await prismadb.hotel.update({
-      where: { id: hotelId },
+      where: { id: params.hotelId },
       data: { ...body },
     });
 
@@ -39,13 +32,12 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  context: ContextParams // Menggunakan `ContextParams`
+  { params }: { params: { hotelId: string } }
 ) {
   try {
     const { userId } = await auth();
-    const { hotelId } = context.params;
 
-    if (!hotelId) {
+    if (!params?.hotelId) {
       return new NextResponse("Hotel Id is required", { status: 400 });
     }
 
@@ -54,7 +46,7 @@ export async function DELETE(
     }
 
     const hotel = await prismadb.hotel.delete({
-      where: { id: hotelId },
+      where: { id: params.hotelId },
     });
 
     return NextResponse.json(hotel);
