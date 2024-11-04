@@ -1,0 +1,8 @@
+{
+  "build": {
+    "env": {
+      "NODE_ENV": "production",
+      "NEXT_PUBLIC_USE_TYPIST_CHECK": "false"
+    }
+  }
+}
