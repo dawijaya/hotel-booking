@@ -63,8 +63,6 @@ const formSchema = z.object({
 
 const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
   const [image, setImage] = useState<string | undefined>(room?.image);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imageIsUploading, setImageIsUploading] = useState(false);
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -112,15 +110,12 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setImageFile(file);
-
     if (file) {
       handleImageUpload(file);
     }
   };
 
   const handleImageUpload = async (file: File) => {
-    setImageIsUploading(true);
     const formData = new FormData();
     formData.append("file", file);
     formData.append(
@@ -143,8 +138,6 @@ const AddRoomForm = ({ hotel, room, handleDialogueOpen }: AddRoomFormProps) => {
     } catch (error) {
       toast({ variant: "destructive", description: "Image upload failed!" });
       console.error("Error uploading image:", error);
-    } finally {
-      setImageIsUploading(false);
     }
   };
 
